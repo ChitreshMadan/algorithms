@@ -1,12 +1,12 @@
 #include<bits/stdc++.h>
-#define lim 1000
+#define lim 1000000
 #define ll long long 
 using namespace std;
-ll f[lim],i,j;
+ll f[lim],i,j,n;
 
-void preprocess(string pat)
+void preprocess(char pat[])
 {
-	ll len=pat.length();
+	ll len=strlen(pat);
 	f[0]=0;
 	for(i=1;i<len;i++)
 	{
@@ -23,37 +23,43 @@ void preprocess(string pat)
 	}
 }
 
-void match(string text,string pat)
+void match(char text[],char pat[])
 {
 	preprocess(pat);
-	j=0;
-	ll plen=pat.length(),tlen=text.length();
-   for(i=0;i<tlen;i++)
+	j=0;i=0;
+	bool flag=0;
+	ll plen=strlen(pat),tlen=strlen(text);
+   while(i<tlen)
    {
-      while(j>=0 && text[i]!=pat[j])
+      
+	  if(pat[j]==text[i])
 	  {
-	    if(j>=1)
-		j=f[j-1];
-		
-		else
-		j--;
-		
-	  }	
-	  j++;
-	  if(j==plen)
-	  {
-	  	j=f[plen-1];
-	  	cout<<i-plen+1;
+	  i++;j++; 
 	  }
+      if(j==plen)
+	  {
+	  	printf("%lld\n",i-j);
+	    j=f[j-1];
+	  	flag=1;
+	  }
+      else if(i<tlen && pat[j]!=text[i])
+	  {
+	  	if(j>0)
+	  	j=f[j-1];
+	  	else
+	    i++;
+      }
    }	
+   if(flag)
+   printf("\n");
 }
 
 int main()
-{ freopen("in.txt","r",stdin);
-  string pat,text;
-  cin>>text>>pat;
-  ll plen=pat.length();
+{ 
+  //std::ios_base::sync_with_stdio(false);
+ //freopen("in.txt","r",stdin);
+  char pat[lim],text[lim];
+  scanf("%s%s",pat,text);
   match(text,pat);
   return 0;
 }
-
